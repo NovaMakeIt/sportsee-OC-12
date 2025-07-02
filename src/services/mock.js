@@ -19,3 +19,23 @@ export const mockActivity = [
   { day: '2025-07-09', kilogram: 75, calories: 220 },
   { day: '2025-07-10', kilogram: 74, calories: 300 },
 ];
+
+// Mock pour la durée moyenne des sessions (du lundi au dimanche)
+export const mockAverageSessions = [
+  { day: 'L', sessionLength: 30 },
+  { day: 'M', sessionLength: 23 },
+  { day: 'M', sessionLength: 45 },
+  { day: 'J', sessionLength: 50 },
+  { day: 'V', sessionLength: 0 },
+  { day: 'S', sessionLength: 60 },
+  { day: 'D', sessionLength: 40 },
+];
+
+export const mockPerformance = [
+  { subject: 'Intensité', value: 80 },
+  { subject: 'Vitesse', value: 90 },
+  { subject: 'Force', value: 70 },
+  { subject: 'Endurance', value: 60 },
+  { subject: 'Énergie', value: 80 },
+  { subject: 'Cardio', value: 50 },
+];
