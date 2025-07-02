@@ -1,75 +1,108 @@
 // BarChart pour afficher l'activité quotidienne
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
-import { mockActivity } from '../../services/mock';
+import {
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  ResponsiveContainer,
+  Legend,
+} from 'recharts'
+import { mockActivity } from '../../services/mock'
 
-function CustomTooltip({ active, payload }) {
-  if (active && payload && payload.length === 2) {
+const CustomTooltip = ({ active, payload }) => {
+  if (active && payload && payload.length) {
     return (
-      <div
-        style={{
-          width: 39,
-          height: 63,
-          background: '#E60000',
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          justifyContent: 'center',
-          color: '#FFF',
-        }}
-      >
-        <div style={{ fontWeight: 500, fontSize: 7, lineHeight: '24px', textAlign: 'center' }}>{payload[0].value}kg</div>
-        <div style={{ fontWeight: 500, fontSize: 7, lineHeight: '24px', textAlign: 'center' }}>{payload[1].value}Kcal</div>
+      <div className="bg-[#E60000] text-white text-xs p-2 rounded">
+        <p>{payload[0].value} kg</p>
+        <p>{payload[1].value} Kcal</p>
       </div>
-    );
+    )
   }
-  return null;
+  return null
 }
 
 export default function ActivityBarChart() {
-  // Pour l'axe X, on veut juste 1 à 7
-  const data = mockActivity.map((item, idx) => ({ ...item, dayLabel: idx + 1 }));
+  // Reformater les jours : 1, 2, 3...
+  const formattedData = mockActivity.map((item, index) => ({
+    ...item,
+    day: index + 1,
+  }))
+
+  // Extraire les poids pour calculer le min/max arrondi
+  const kilos = mockActivity.map((a) => a.kilogram)
+  const minKg = Math.min(...kilos) - 1
+  const maxKg = Math.max(...kilos) + 1
+  const midKg = Math.round((minKg + maxKg) / 2)
+  const yTicks = [minKg, midKg, maxKg]
 
   return (
-    <div className="bg-white rounded-xl p-6 shadow-md w-full h-[320px]">
-      <h2 className="font-medium text-[15px] leading-6 text-[#20253A] mb-4">Activité quotidienne</h2>
-      <ResponsiveContainer width="100%" height="80%">
-        <BarChart data={data} barGap={8}>
+    <div className="bg-[#FBFBFB] rounded-[5px] h-full max-h-[320px] w-full p-8">
+      <div className="flex justify-between items-center mb-4">
+        <h2 className="text-sm font-medium text-[#20253A]">
+          Activité quotidienne
+        </h2>
+        <div className="flex gap-4 text-[#74798C] text-[14px] font-medium">
+          <div className="flex items-center gap-2">
+            <span className="w-2 h-2 rounded-full bg-[#282D30] inline-block"></span>
+            Poids (kg)
+          </div>
+          <div className="flex items-center gap-2">
+            <span className="w-2 h-2 rounded-full bg-[#E60000] inline-block"></span>
+            Calories brûlées (Kcal)
+          </div>
+        </div>
+      </div>
+      <ResponsiveContainer width="100%" height="100%">
+        <BarChart
+          data={formattedData}
+          barGap={8}
+          margin={{ top: 20, right: 0, left: 0, bottom: 10 }}
+        >
           <CartesianGrid strokeDasharray="3 3" vertical={false} />
-          <XAxis dataKey="dayLabel" tickLine={false} axisLine={false} />
-          {
-(() => {
-  const kgValues = data.map(d => d.kilogram);
-  const min = Math.min(...kgValues);
-  const max = Math.max(...kgValues);
-  const middle = (min + max) / 2;
-  const ticks = [min, middle, max];
-  return (
-    <YAxis
-      yAxisId="kg"
-      dataKey="kilogram"
-      orientation="right"
-      axisLine={false}
-      tickLine={false}
-      domain={[min, max]}
-      ticks={ticks}
-      tickFormatter={v => Number.isInteger(v) ? v : v.toFixed(1)}
-    />
-  );
-})()}
-
-          <YAxis yAxisId="cal" dataKey="calories" hide />
-          <Tooltip cursor={{ fill: '#e5e5e5' }} content={<CustomTooltip />} />
-          <Legend
-            verticalAlign="top"
-            align="right"
-            iconType="circle"
-            wrapperStyle={{ top: -30, right: 0 }}
-
+          <XAxis
+            dataKey="day"
+            tickLine={false}
+            axisLine={false}
+            stroke="#9B9EAC"
           />
-          <Bar yAxisId="kg" dataKey="kilogram" name="Poids (kg)" fill="#282D30" radius={[10, 10, 0, 0]} barSize={7} />
-          <Bar yAxisId="cal" dataKey="calories" name="Calories brûlées (kCal)" fill="#E60000" radius={[10, 10, 0, 0]} barSize={7} />
+          <YAxis
+            yAxisId="left"
+            orientation="left"
+            dataKey="calories"
+            hide
+          />
+          <YAxis
+            yAxisId="right"
+            orientation="right"
+            dataKey="kilogram"
+            tickLine={false}
+            axisLine={false}
+            stroke="#9B9EAC"
+            domain={[minKg, maxKg]}
+            ticks={yTicks}
+            tick={{ dx: 30 }}
+          />
+          <Tooltip content={<CustomTooltip />} />
+          <Bar
+            yAxisId="right"
+            dataKey="kilogram"
+            fill="#282D30"
+            radius={[3, 3, 0, 0]}
+            name="Poids (kg)"
+            barSize={7}
+          />
+          <Bar
+            yAxisId="left"
+            dataKey="calories"
+            fill="#E60000"
+            radius={[3, 3, 0, 0]}
+            name="Calories brûlées (Kcal)"
+            barSize={7}
+          />
         </BarChart>
       </ResponsiveContainer>
     </div>
-  );
+  )
 }
