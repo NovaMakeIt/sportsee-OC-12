@@ -17,7 +17,7 @@ import lipides from '../assets/icon/lipides.svg';
 export default function Profile() {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
-  const userId = 12; // à adapter selon le backend OCR
+  const userId = 12; // à adapter
 
   useEffect(() => {
     setLoading(true);
@@ -40,18 +40,22 @@ export default function Profile() {
   const lipidCount = user.keyData.lipidCount;
 
   return (
-    <main className="flex-1 bg-[#FFFFFF] p-8">
+            <main className="flex-1 bg-[#FFFFFF] p-8 overflow-y-auto xl:overflow-y-hidden">
       <ProfileHeader firstName={firstName} />
-      <div className='flex gap-8'>
-        <section className="mt-8 w-full justify-between flex flex-col gap-8">
-          <ActivityBarChart userId={userId} />
-          <div className='flex gap-6'>
+      <div className='flex flex-col xl:flex-row gap-8'>
+        <section className="mt-8 w-full flex flex-col gap-8 justify-between">
+          <div className='h-activity-chart-responsive'>
+            <ActivityBarChart userId={userId} />
+          </div>
+          <div className='flex flex-col xl:flex-row gap-6'>
             <AverageSessionsLineChart userId={userId} />
-            <PerformanceRadarChart userId={userId} />
-            <ScoreRadialBarChart userId={userId} />
+            <div className="flex flex-col md:flex-row gap-6 xl:contents">
+              <PerformanceRadarChart userId={userId} />
+              <ScoreRadialBarChart userId={userId} />
+            </div>
           </div>
         </section>
-        <section className='flex flex-col gap-8 mt-8 w-full max-w-[258px] justify-between'>
+        <section className='flex flex-col md:flex-row xl:flex-col gap-8 mt-8 w-full xl:max-w-[258px] justify-between'>
             <KeyInfoCard source={calories} alt={"icon-calories"} mesure={calorieCount} nomMesure={"Calories"} bgColor={'#FFE5E5'} uniteMesure={"kCal"} />
             <KeyInfoCard source={proteines} alt={"icon-proteines"} mesure={proteinCount} nomMesure={"Proteines"} bgColor={'#4AB8FF1A'} uniteMesure={"g"} />
             <KeyInfoCard source={glucides} alt={"icon-glucides"} mesure={carbohydrateCount} nomMesure={"Glucides"} bgColor={'#FFFFEF'} uniteMesure={"g"} />

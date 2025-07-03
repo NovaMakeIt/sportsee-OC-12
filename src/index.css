@@ -1,3 +1,27 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer utilities {
+  @media (max-width: 1440px) {
+    .h-activity-chart-responsive {
+      height: 250px;
+    }
+  }
+
+  @media (min-width: 1025px) {
+    .lg-plus\:overflow-y-hidden {
+      overflow-y: hidden;
+    }
+  }
+
+  @media (min-width: 1280px) {
+    .xl\:contents {
+      display: contents;
+    }
+  }
+}
+
 :root {
   font-family: "Roboto", sans-serif;
 }
