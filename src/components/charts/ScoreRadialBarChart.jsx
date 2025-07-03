@@ -5,19 +5,43 @@ import {
   ResponsiveContainer,
   PolarAngleAxis,
 } from 'recharts'
-import { mockUser } from '../../services/mock'
+import { useEffect, useState } from 'react'
+import { fetchUserData } from '../../services/api'
 
-export default function RadialScoreChart() {
+export default function RadialScoreChart({ userId }) {
+  const [score, setScore] = useState(null)
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    setLoading(true)
+    fetchUserData(userId)
+      .then(res => {
+        if (res && res.data && (res.data.todayScore !== undefined || res.data.score !== undefined)) {
+          setScore(res.data.todayScore || res.data.score)
+        } else {
+          setScore(null)
+        }
+        setLoading(false)
+      })
+      .catch(() => {
+        setScore(null)
+        setLoading(false)
+      })
+  }, [userId])
+
+  if (loading || score === null) {
+    return <div className="bg-[#FBFBFB] rounded-[5px] h-full max-h-[250px] w-full flex items-center justify-center">Chargement...</div>
+  }
   const data = [
     {
       name: 'score',
-      value: mockUser.todayScore * 100,
+      value: score * 100,
       fill: '#FF0000',
     },
   ]
 
   return (
-    <div className="bg-[#FBFBFB] rounded-[5px] h-[250px] w-full relative flex flex-col justify-between p-4">
+    <div className="bg-[#FBFBFB] rounded-[5px] h-full max-h-[250px] w-full relative flex flex-col justify-between p-4">
       <h2 className="text-sm font-medium text-[#20253A]">Score</h2>
       <ResponsiveContainer width="100%" height="100%">
         <RadialBarChart
@@ -44,7 +68,7 @@ export default function RadialScoreChart() {
       </ResponsiveContainer>
       <div className="absolute inset-0 flex flex-col items-center justify-center mt-4">
         <p className="text-xl xl:text-2xl font-bold text-[#282D30]">
-          {mockUser.todayScore * 100}%
+          {score * 100}%
         </p>
         <p className="text-[9px] xl:text-sm max-w-[20%] font-medium text-[#74798C] text-center leading-tight xl:leading-[26px]">
           de votre objectif

@@ -6,7 +6,9 @@ import {
   XAxis,
   Tooltip,
 } from 'recharts'
-import { mockAverageSessions } from '../../services/mock'
+import { useEffect, useState } from 'react'
+import { fetchUserAverageSessions } from '../../services/api'
+import { formatAverageSessionsData } from '../../services/dataFormatter'
 
 const CustomTooltip = ({ active, payload }) => {
   if (active && payload && payload.length) {
@@ -22,7 +24,30 @@ const CustomTooltip = ({ active, payload }) => {
   return null
 }
 
-export default function AverageSessionsChart() {
+export default function AverageSessionsChart({ userId }) {
+  const [data, setData] = useState(null)
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    setLoading(true)
+    fetchUserAverageSessions(userId)
+      .then(res => {
+        if (res && res.data && res.data.sessions) {
+          setData(formatAverageSessionsData(res.data))
+        } else {
+          setData([])
+        }
+        setLoading(false)
+      })
+      .catch(() => {
+        setData([])
+        setLoading(false)
+      })
+  }, [userId])
+
+  if (loading || !data) {
+    return <div className="bg-[#FF0000] rounded-[5px] h-full max-h-[250px] w-full p-8 flex items-center justify-center text-white">Chargement...</div>
+  }
   return (
     <div className="bg-[#FF0000] rounded-[5px] h-full max-h-[250px] w-full p-8">
       <h2 className="text-white text-sm opacity-50 mb-4">
@@ -30,7 +55,7 @@ export default function AverageSessionsChart() {
       </h2>
       <ResponsiveContainer width="100%" height="100%">
         <LineChart
-          data={mockAverageSessions}
+          data={data}
           margin={{ top: 10, right: 10, left: 10, bottom: 10 }}
         >
           <defs>
@@ -48,6 +73,7 @@ export default function AverageSessionsChart() {
             tickLine={false}
             tick={{ fontSize: 12 }}
             padding={{ left: 10, right: 10 }}
+            tickFormatter={day => ['L','M','M','J','V','S','D'][day-1]}
           />
           <Tooltip
             content={<CustomTooltip />}

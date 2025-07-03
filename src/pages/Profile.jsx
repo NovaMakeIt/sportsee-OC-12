@@ -1,5 +1,7 @@
 // Page du profil utilisateur
-import { mockUser } from '../services/mock';
+import { useEffect, useState } from 'react';
+import { fetchUserData } from '../services/api';
+import { formatUserData } from '../services/dataFormatter';
 import ProfileHeader from '../components/ProfileHeader';
 import ActivityBarChart from '../components/charts/ActivityBarChart';
 import AverageSessionsLineChart from '../components/charts/AverageSessionsLineChart';
@@ -13,21 +15,40 @@ import glucides from '../assets/icon/glucides.svg';
 import lipides from '../assets/icon/lipides.svg';
 
 export default function Profile() {
-  const firstName = mockUser.userInfos.firstName;
-  const calorieCount = mockUser.keyData.calorieCount;
-  const proteinCount = mockUser.keyData.proteinCount;
-  const carbohydrateCount = mockUser.keyData.carbohydrateCount;
-  const lipidCount = mockUser.keyData.lipidCount;
+  const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const userId = 12; // à adapter selon le backend OCR
+
+  useEffect(() => {
+    setLoading(true);
+    fetchUserData(userId)
+      .then(data => {
+        setUser(formatUserData(data.data));
+        setLoading(false);
+      })
+      .catch(() => setLoading(false));
+  }, [userId]);
+
+  if (loading || !user) {
+    return <main className="flex-1 bg-[#FFFFFF] p-8 flex items-center justify-center"><span>Chargement...</span></main>;
+  }
+
+  const firstName = user.userInfos.firstName;
+  const calorieCount = user.keyData.calorieCount;
+  const proteinCount = user.keyData.proteinCount;
+  const carbohydrateCount = user.keyData.carbohydrateCount;
+  const lipidCount = user.keyData.lipidCount;
+
   return (
     <main className="flex-1 bg-[#FFFFFF] p-8">
       <ProfileHeader firstName={firstName} />
       <div className='flex gap-8'>
         <section className="mt-8 w-full justify-between flex flex-col gap-8">
-          <ActivityBarChart />
+          <ActivityBarChart userId={userId} />
           <div className='flex gap-6'>
-            <AverageSessionsLineChart />
-            <PerformanceRadarChart />
-            <ScoreRadialBarChart />
+            <AverageSessionsLineChart userId={userId} />
+            <PerformanceRadarChart userId={userId} />
+            <ScoreRadialBarChart userId={userId} />
           </div>
         </section>
         <section className='flex flex-col gap-8 mt-8 w-full max-w-[258px] justify-between'>
@@ -40,3 +61,4 @@ export default function Profile() {
     </main>
   );
 }
+

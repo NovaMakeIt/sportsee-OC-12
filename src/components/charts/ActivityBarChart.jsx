@@ -9,7 +9,9 @@ import {
   ResponsiveContainer,
   Legend,
 } from 'recharts'
-import { mockActivity } from '../../services/mock'
+import { useEffect, useState } from 'react'
+import { fetchUserActivity } from '../../services/api'
+import { formatActivityData } from '../../services/dataFormatter'
 
 const CustomTooltip = ({ active, payload }) => {
   if (active && payload && payload.length) {
@@ -23,15 +25,39 @@ const CustomTooltip = ({ active, payload }) => {
   return null
 }
 
-export default function ActivityBarChart() {
+export default function ActivityBarChart({ userId }) {
+  const [data, setData] = useState(null)
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    setLoading(true)
+    fetchUserActivity(userId)
+      .then(res => {
+        if (res && res.data && res.data.sessions) {
+          setData(formatActivityData(res.data))
+        } else {
+          setData([])
+        }
+        setLoading(false)
+      })
+      .catch(() => {
+        setData([])
+        setLoading(false)
+      })
+  }, [userId])
+
+  if (loading || !data) {
+    return <div className="bg-[#FBFBFB] rounded-[5px] h-full max-h-[320px] w-full p-8 flex items-center justify-center">Chargement...</div>
+  }
+
   // Reformater les jours : 1, 2, 3...
-  const formattedData = mockActivity.map((item, index) => ({
+  const formattedData = data.map((item, index) => ({
     ...item,
     day: index + 1,
   }))
 
   // Extraire les poids pour calculer le min/max arrondi
-  const kilos = mockActivity.map((a) => a.kilogram)
+  const kilos = data.map((a) => a.kilogram)
   const minKg = Math.min(...kilos) - 1
   const maxKg = Math.max(...kilos) + 1
   const midKg = Math.round((minKg + maxKg) / 2)
