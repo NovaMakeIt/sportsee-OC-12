@@ -48,16 +48,20 @@ Ce projet nécessite un backend pour fournir les données. Assurez-vous de clone
 
 ```
 /src
-|-- /api/           # Fonctions pour les appels à l'API et le formatage des données
-|-- /assets/        # Images, icônes et autres ressources statiques
-|-- /components/    # Composants React réutilisables
-|   |-- /charts/    # Composants de graphiques (ex: ActivityBarChart)
-|   |-- /cards/     # Composants de cartes (ex: KeyInfoCard)
-|   |-- /layout/    # Composants de mise en page (Header, Sidebar)
-|-- /hooks/         # Hooks React personnalisés
-|-- /models/        # Modèles de données ou classes
-|-- /pages/         # Composants de page (ex: Profile, Home)
-|-- App.jsx         # Composant racine de l'application
-|-- main.jsx        # Point d'entrée de l'application
-|-- index.css       # Fichier CSS global avec TailwindCSS
+|-- /assets/          # Icônes, logos et autres ressources statiques
+|-- /components/      # Composants React réutilisables
+|   |-- /cards/       # Composants pour les cartes d'information (calories, etc.)
+|   |-- /charts/      # Composants pour les graphiques (activité, score, etc.)
+|   |-- /layout/      # Composants de mise en page (Header, Sidebar)
+|   |-- ProfileHeader.jsx # Composant d'en-tête de la page de profil
+|-- /pages/           # Composants représentant les pages de l'application
+|   |-- Profile.jsx   # Page principale du tableau de bord utilisateur
+|-- /services/        # Logique et communication avec l'API
+|   |-- api.js        # Fonctions pour les appels à l'API backend
+|   |-- dataFormatter.js # Fonctions pour formater les données de l'API
+|   |-- mock.js       # Données mockées pour le développement
+|-- App.jsx           # Composant racine
+|-- main.jsx          # Point d'entrée de l'application React
+|-- index.css         # Fichier CSS global (incluant les directives Tailwind)
+|-- App.css           # Styles spécifiques au composant App
 ```
