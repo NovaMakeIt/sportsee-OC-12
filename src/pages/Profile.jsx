@@ -14,6 +14,14 @@ import proteines from '../assets/icon/proteines.svg';
 import glucides from '../assets/icon/glucides.svg';
 import lipides from '../assets/icon/lipides.svg';
 
+/**
+ * Affiche la page de profil de l'utilisateur.
+ * Ce composant récupère les données de l'utilisateur, gère les états de chargement et d'erreur,
+ * et affiche les différents graphiques et cartes d'information.
+ *
+ * @component
+ * @returns {JSX.Element}
+ */
 export default function Profile() {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);

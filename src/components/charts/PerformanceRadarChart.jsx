@@ -10,6 +10,15 @@ import { useEffect, useState } from 'react'
 import { fetchUserPerformance } from '../../services/api'
 import { formatPerformanceData } from '../../services/dataFormatter'
 
+/**
+ * Affiche les performances de l'utilisateur sous forme de graphique en radar.
+ * Chaque axe du radar représente un type de performance (ex: Cardio, Energie).
+ *
+ * @component
+ * @param {object} props - Les propriétés du composant.
+ * @param {number} props.userId - L'ID de l'utilisateur pour récupérer les données.
+ * @returns {JSX.Element}
+ */
 export default function PerformanceRadarChart({ userId }) {
   const [data, setData] = useState(null)
   const [loading, setLoading] = useState(true)

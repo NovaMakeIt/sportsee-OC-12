@@ -8,6 +8,15 @@ import {
 import { useEffect, useState } from 'react'
 import { fetchUserData } from '../../services/api'
 
+/**
+ * Affiche le score de l'utilisateur sous forme de graphique radial.
+ * Le score représente le pourcentage de l'objectif atteint.
+ *
+ * @component
+ * @param {object} props - Les propriétés du composant.
+ * @param {number} props.userId - L'ID de l'utilisateur pour récupérer les données.
+ * @returns {JSX.Element}
+ */
 export default function RadialScoreChart({ userId }) {
   const [score, setScore] = useState(null)
   const [loading, setLoading] = useState(true)

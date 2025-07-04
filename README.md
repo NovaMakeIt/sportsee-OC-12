@@ -1,12 +1,63 @@
-# React + Vite
+# SportSee - Tableau de bord d'analytics sportif
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+SportSee est une application web développée avec React qui permet aux utilisateurs de suivre leurs activités sportives et d'analyser leurs performances à travers des graphiques interactifs.
 
-Currently, two official plugins are available:
+## Prérequis
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+Avant de commencer, assurez-vous d'avoir les outils suivants installés sur votre machine :
+- [Node.js](https://nodejs.org/) (version 14 ou supérieure)
+- [npm](https://www.npmjs.com/) ou [yarn](https://yarnpkg.com/)
 
-## Expanding the ESLint configuration
+## Installation
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+1.  Clonez le dépôt du projet :
+    ```bash
+    git clone https://github.com/NovaMakeIt/sportsee-OC-12.git
+    ```
+2.  Naviguez dans le dossier du projet :
+    ```bash
+    cd sportsee-OC-12
+    ```
+3.  Installez les dépendances :
+    ```bash
+    npm install
+    # ou
+    yarn install
+    ```
+
+## Lancer le projet
+
+Pour lancer l'application en mode développement, exécutez la commande suivante :
+
+```bash
+npm run dev
+# ou
+yarn dev
+```
+
+L'application sera alors accessible à l'adresse `http://localhost:5173`.
+
+## Lancer le backend
+
+Ce projet nécessite un backend pour fournir les données. Assurez-vous de cloner et de lancer le backend fourni pour ce projet dans un terminal séparé.
+
+1. Clonez le dépôt du backend.
+2. Suivez les instructions du `README.md` du backend pour l'installer et le lancer (généralement sur le port 3000).
+
+## Structure du projet
+
+```
+/src
+|-- /api/           # Fonctions pour les appels à l'API et le formatage des données
+|-- /assets/        # Images, icônes et autres ressources statiques
+|-- /components/    # Composants React réutilisables
+|   |-- /charts/    # Composants de graphiques (ex: ActivityBarChart)
+|   |-- /cards/     # Composants de cartes (ex: KeyInfoCard)
+|   |-- /layout/    # Composants de mise en page (Header, Sidebar)
+|-- /hooks/         # Hooks React personnalisés
+|-- /models/        # Modèles de données ou classes
+|-- /pages/         # Composants de page (ex: Profile, Home)
+|-- App.jsx         # Composant racine de l'application
+|-- main.jsx        # Point d'entrée de l'application
+|-- index.css       # Fichier CSS global avec TailwindCSS
+```

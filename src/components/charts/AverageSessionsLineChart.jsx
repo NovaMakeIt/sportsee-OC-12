@@ -10,6 +10,14 @@ import { useEffect, useState } from 'react'
 import { fetchUserAverageSessions } from '../../services/api'
 import { formatAverageSessionsData } from '../../services/dataFormatter'
 
+/**
+ * Affiche une infobulle personnalisée pour le graphique des sessions moyennes.
+ *
+ * @param {object} props - Les propriétés de l'infobulle.
+ * @param {boolean} props.active - Indique si l'infobulle est active.
+ * @param {Array} props.payload - Les données à afficher dans l'infobulle.
+ * @returns {JSX.Element|null}
+ */
 const CustomTooltip = ({ active, payload }) => {
   if (active && payload && payload.length) {
     return (
@@ -24,6 +32,14 @@ const CustomTooltip = ({ active, payload }) => {
   return null
 }
 
+/**
+ * Affiche un graphique en ligne représentant la durée moyenne des sessions de l'utilisateur.
+ *
+ * @component
+ * @param {object} props - Les propriétés du composant.
+ * @param {number} props.userId - L'ID de l'utilisateur pour récupérer les données.
+ * @returns {JSX.Element}
+ */
 export default function AverageSessionsChart({ userId }) {
   const [data, setData] = useState(null)
   const [loading, setLoading] = useState(true)
